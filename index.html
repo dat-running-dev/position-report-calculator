@@ -5,39 +5,135 @@
 <!-- Import Roboto font from Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
   body { 
-    font-family: 'Roboto', sans-serif; /* Updated font to Roboto */
+    font-family: 'Roboto', sans-serif; 
+    background-color: #dde6d0; /* Updated to the requested brand tint */
     margin: 0; 
-    padding: 10px; 
+    padding: 40px 20px; 
+    color: #000000; /* Updated to Client Primary Black */
   }
-  .table-container { overflow-x: auto; }
+  .table-container { 
+    max-width: 900px; /* Constrain width for better reading */
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    overflow-x: auto; 
+  }
   table { width: 100%; border-collapse: collapse; text-align: left; }
-  th, td { padding: 12px; border: 1px solid #e0e0e0; }
   
-  /* Adjusted thead to prevent border conflicts with the blue headers */
-  thead tr { border-bottom: 2px solid #cccccc; }
-  tbody tr:nth-child(even) { background-color: #fafafa; }
-  .bold-row th, .bold-row td { font-weight: bold; }
-  .total-row { background-color: #f5f5f5; border-top: 2px solid #cccccc; font-weight: bold; }
+  /* Sleek cells: removed vertical borders, added generous padding */
+  th, td { padding: 16px 24px; border-bottom: 1px solid #f2f2f2; }
   
-  /* Styling for the section headers */
-  .section-header th { background-color: #E7EEF6; border-top: 2px solid #999; border-bottom: 2px solid #999; font-weight: bold; text-transform: uppercase; }
-  .final-total { background-color: #E7EEF6; border-top: 2px solid #999; font-weight: bold; font-size: 1.1em; }
-  .positive { color: #008000; font-weight: bold; }
-  .negative { color: #d32f2f; font-weight: bold; }
-  
-  input[type="number"] {
-    width: 100px;
-    padding: 8px;
-    font-size: 1em;
-    border: 1px solid #999;
-    border-radius: 4px;
-    font-family: 'Roboto', sans-serif; /* Ensure inputs also use Roboto */
+  /* Section Headers */
+  .section-header th { 
+    background-color: #0054a3; /* Primary RIBO Blue */
+    color: #ffffff;
+    border-top: none; 
+    border-bottom: 2px solid #003366; 
+    font-weight: 700; 
+    font-size: 0.85rem;
+    text-transform: uppercase; 
+    letter-spacing: 0.05em;
   }
-  .currency-symbol { margin-right: 4px; }
+  
+  /* Subtle helper text instead of harsh italics */
+  td em { color: #595959; font-style: normal; font-size: 0.9em; }
+  
+  /* Total Rows */
+  .bold-row th, .bold-row td { font-weight: 700; }
+  .total-row th, .total-row td { 
+    background-color: #f2f2f2; 
+    border-top: 2px solid #cccccc; 
+    border-bottom: 16px solid #ffffff; /* Creates a clean visual gap before the next section */
+    font-weight: 700; 
+  }
+  
+  /* Final Position Row - Make it pop with a light blue background */
+  .final-total th, .final-total td { 
+    background-color: #e6eff6; /* 10% light tint of RIBO Blue */
+    color: #000000;
+    border-top: none; 
+    font-weight: 700; 
+    font-size: 1.15em; 
+  }
+  .final-total td em, .final-total .currency-symbol { color: #595959; } /* Match standard helper text */
+  
+  /* Colors for outputs */
+  /* Restored original brand colors, removed white background */
+  .positive { 
+    color: #799c4c !important; /* PMS 576 Green */
+    background-color: transparent; 
+    font-weight: 700; 
+  }
+  .negative { 
+    color: #c23c33 !important; /* PMS 180 Red */
+    background-color: transparent; 
+    font-weight: 700; 
+  }
+  
+  /* Shared alignment for Inputs and Totals */
+  input[type="number"], .calc-amount {
+    width: 140px;
+    padding: 10px 12px;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif; 
+    text-align: right; /* Numbers are much easier to read right-aligned */
+    box-sizing: border-box; /* Ensures padding doesn't break alignment */
+  }
+  
+  /* Modern Input Fields */
+  input[type="number"] {
+    color: #000000;
+    background-color: #f2f2f2;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+  
+  /* Total Amounts */
+  .calc-amount {
+    display: inline-block;
+    border: 1px solid transparent; /* Mimics the input's border so numbers align perfectly */
+    font-weight: 700;
+  }
+
+  input[type="number"]:focus {
+    outline: none;
+    border-color: #0054a3; /* Primary RIBO Blue focus ring */
+    box-shadow: 0 0 0 3px rgba(0, 84, 163, 0.15);
+    background-color: #ffffff;
+  }
+  .currency-symbol { 
+    margin-right: 8px; 
+    color: #595959; 
+    font-weight: 500; 
+  }
+
+  /* --- Highlight Effect Styles --- */
+  .highlight th, .highlight td { 
+    background-color: rgba(243, 196, 0, 0.25) !important; /* 25% tint of PMS 7406 Yellow */
+    color: #000000 !important;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  /* Highlight the total row currently being hovered */
+  #row-4:hover th, #row-4:hover td,
+  #row-6:hover th, #row-6:hover td,
+  #row-11:hover th, #row-11:hover td,
+  #row-12:hover th, #row-12:hover td {
+    background-color: rgba(101, 187, 176, 0.25) !important; /* 25% tint of PMS 563 Mint */
+    color: #000000 !important;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  /* Change cursor to indicate interactivity */
+  #row-4, #row-6, #row-11, #row-12 {
+    cursor: help; 
+  }
 </style>
 </head>
 <body>
@@ -52,7 +148,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <!-- Added IDs to all rows for JavaScript targeting -->
+      <tr id="row-1">
         <th scope="row" id="label-1">(1) Cash/Bank Balances</th>
         <td></td>
         <td>
@@ -60,7 +157,7 @@
           <input type="number" id="val1" value="50000" aria-labelledby="label-1">
         </td>
       </tr>
-      <tr>
+      <tr id="row-2">
         <th scope="row" id="label-2">(2) Total Premiums Receivable</th>
         <td></td>
         <td>
@@ -68,7 +165,7 @@
           <input type="number" id="val2" value="100000" aria-labelledby="label-2">
         </td>
       </tr>
-      <tr>
+      <tr id="row-3">
         <th scope="row" id="label-3">(3) Less Premiums over 90 Days</th>
         <td></td>
         <td>
@@ -76,12 +173,15 @@
           <input type="number" id="val3" value="15000" aria-labelledby="label-3">
         </td>
       </tr>
-      <tr class="bold-row">
+      <tr class="bold-row" id="row-4">
         <th scope="row">(4) Allowable Premiums</th>
         <td><em>(Auto-calculated: 2 minus 3)</em></td>
-        <td id="calc4" aria-live="polite">$0</td>
+        <td>
+          <span class="currency-symbol" aria-hidden="true">$</span>
+          <span class="calc-amount" id="calc4" aria-live="polite">0</span>
+        </td>
       </tr>
-      <tr>
+      <tr id="row-5">
         <th scope="row" id="label-5">(5) Investments held in trust</th>
         <td></td>
         <td>
@@ -89,10 +189,13 @@
           <input type="number" id="val5" value="10000" aria-labelledby="label-5">
         </td>
       </tr>
-      <tr class="total-row">
+      <tr class="total-row" id="row-6">
         <th scope="row">(6) TOTAL ASSETS</th>
         <td><em>(Sum of 1, 4, &amp; 5)</em></td>
-        <td id="calc6" aria-live="polite" style="font-size: 1.1em; color: #0056b3;">$0</td>
+        <td>
+          <span class="currency-symbol" aria-hidden="true">$</span>
+          <span class="calc-amount" id="calc6" aria-live="polite">0</span>
+        </td>
       </tr>
       
       <tr class="section-header">
@@ -100,7 +203,7 @@
         <th scope="col">Calculation / Source</th>
         <th scope="col">Amount</th>
       </tr>
-      <tr>
+      <tr id="row-7">
         <th scope="row" id="label-7">(7) Insurance Premiums Payable</th>
         <td></td>
         <td>
@@ -108,7 +211,7 @@
           <input type="number" id="val7" value="120000" aria-labelledby="label-7">
         </td>
       </tr>
-      <tr>
+      <tr id="row-8">
         <th scope="row" id="label-8">(8) Prepaid Premiums</th>
         <td></td>
         <td>
@@ -116,7 +219,7 @@
           <input type="number" id="val8" value="5000" aria-labelledby="label-8">
         </td>
       </tr>
-      <tr>
+      <tr id="row-9">
         <th scope="row" id="label-9">(9) Refunds due to Insured</th>
         <td></td>
         <td>
@@ -124,7 +227,7 @@
           <input type="number" id="val9" value="2000" aria-labelledby="label-9">
         </td>
       </tr>
-      <tr>
+      <tr id="row-10">
         <th scope="row" id="label-10">(10) Retail Sales Tax Payable</th>
         <td></td>
         <td>
@@ -132,10 +235,13 @@
           <input type="number" id="val10" value="8000" aria-labelledby="label-10">
         </td>
       </tr>
-      <tr class="total-row">
+      <tr class="total-row" id="row-11">
         <th scope="row">(11) TOTAL LIABILITIES</th>
         <td><em>(Sum of 7, 8, 9, &amp; 10)</em></td>
-        <td id="calc11" aria-live="polite" style="font-size: 1.1em; color: #b30000;">$0</td>
+        <td>
+          <span class="currency-symbol" aria-hidden="true">$</span>
+          <span class="calc-amount" id="calc11" aria-live="polite">0</span>
+        </td>
       </tr>
 
       <tr class="section-header">
@@ -143,10 +249,13 @@
         <th scope="col">Calculation</th>
         <th scope="col">Amount</th>
       </tr>
-      <tr class="final-total">
+      <tr class="final-total" id="row-12">
         <th scope="row">(12) NET TRUST POSITION</th>
         <td><em>(Line 6 minus Line 11)</em></td>
-        <td id="calc12" aria-live="polite">$0</td>
+        <td>
+          <span class="currency-symbol" aria-hidden="true">$</span>
+          <span class="calc-amount" id="calc12" aria-live="polite">0</span>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -157,8 +266,6 @@
     
     // Setup currency formatting
     const formatter = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
       maximumFractionDigits: 0
     });
 
@@ -192,9 +299,9 @@
 
       // 5. Dynamic Color Coding for Net Trust Position
       if (netTrustPosition >= 0) {
-        netOutput.className = 'positive'; // Turns Green
+        netOutput.className = 'calc-amount positive'; // Turns Green
       } else {
-        netOutput.className = 'negative'; // Turns Red
+        netOutput.className = 'calc-amount negative'; // Turns Red
       }
     }
 
@@ -203,6 +310,30 @@
     inputs.forEach(input => {
       input.addEventListener('input', calculateTotals);
     });
+
+    // --- NEW: Hover Highlight Effect Logic ---
+    function setupHoverHighlight(triggerRowId, rowsToHighlightIds) {
+      const triggerRow = document.getElementById(triggerRowId);
+      const targetRows = rowsToHighlightIds.map(id => document.getElementById(id));
+
+      triggerRow.addEventListener('mouseenter', function() {
+        targetRows.forEach(row => {
+          if (row) row.classList.add('highlight');
+        });
+      });
+
+      triggerRow.addEventListener('mouseleave', function() {
+        targetRows.forEach(row => {
+          if (row) row.classList.remove('highlight');
+        });
+      });
+    }
+
+    // Connect the trigger rows to the rows they should highlight
+    setupHoverHighlight('row-4', ['row-2', 'row-3']); // Allowable Premiums
+    setupHoverHighlight('row-6', ['row-1', 'row-4', 'row-5']); // Total Assets
+    setupHoverHighlight('row-11', ['row-7', 'row-8', 'row-9', 'row-10']); // Total Liabilities
+    setupHoverHighlight('row-12', ['row-6', 'row-11']); // Net Position
 
     // Run math once on load
     calculateTotals();
