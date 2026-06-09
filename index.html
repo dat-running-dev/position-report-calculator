@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Import Roboto font from Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -134,6 +135,51 @@
   #row-4, #row-6, #row-11, #row-12 {
     cursor: help; 
   }
+
+  /* --- Actions Footer (Premium Reset Button matching requested layout) --- */
+  .actions-container {
+    max-width: 900px;
+    margin: 24px auto 0 auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .reset-btn {
+    background-color: #f3c400; /* Matches PMS 7406 Yellow brand color from the image */
+    color: #000000; /* Crisp primary black text */
+    border: none;
+    padding: 14px 28px; /* Chunkier, generous padding matching the visual style */
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 6px; /* Sleek, slight curvature matching the image */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  .reset-btn:hover {
+    background-color: #e0b500; /* Slightly deeper gold to provide professional interaction feedback */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+  }
+  .reset-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+  }
+  .reset-btn:focus {
+    outline: none;
+    /* Removed the yellow outline ring for selection feedback */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+  }
+  .reset-btn svg {
+    stroke: #000000; /* Ensure reset icon matches the black font color */
+    fill: none;
+    transition: transform 0.3s ease;
+  }
+  .reset-btn:hover svg {
+    transform: rotate(-180deg);
+  }
 </style>
 </head>
 <body>
@@ -261,6 +307,18 @@
   </table>
 </div>
 
+<!-- Accessible Action Button (Styled to Match Your Image) -->
+<div class="actions-container">
+  <button id="reset-btn" class="reset-btn" aria-label="Reset all fields to standard defaults">
+    <!-- SVG Undo/Reset Arrow Icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+      <path d="M3 3v5h5"/>
+    </svg>
+    Reset
+  </button>
+</div>
+
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     
@@ -311,22 +369,24 @@
       input.addEventListener('input', calculateTotals);
     });
 
-    // --- NEW: Hover Highlight Effect Logic ---
+    // --- Hover Highlight Effect Logic ---
     function setupHoverHighlight(triggerRowId, rowsToHighlightIds) {
       const triggerRow = document.getElementById(triggerRowId);
       const targetRows = rowsToHighlightIds.map(id => document.getElementById(id));
 
-      triggerRow.addEventListener('mouseenter', function() {
-        targetRows.forEach(row => {
-          if (row) row.classList.add('highlight');
+      if (triggerRow) {
+        triggerRow.addEventListener('mouseenter', function() {
+          targetRows.forEach(row => {
+            if (row) row.classList.add('highlight');
+          });
         });
-      });
 
-      triggerRow.addEventListener('mouseleave', function() {
-        targetRows.forEach(row => {
-          if (row) row.classList.remove('highlight');
+        triggerRow.addEventListener('mouseleave', function() {
+          targetRows.forEach(row => {
+            if (row) row.classList.remove('highlight');
+          });
         });
-      });
+      }
     }
 
     // Connect the trigger rows to the rows they should highlight
@@ -334,6 +394,18 @@
     setupHoverHighlight('row-6', ['row-1', 'row-4', 'row-5']); // Total Assets
     setupHoverHighlight('row-11', ['row-7', 'row-8', 'row-9', 'row-10']); // Total Liabilities
     setupHoverHighlight('row-12', ['row-6', 'row-11']); // Net Position
+
+    // --- Reset Button Logic ---
+    const resetBtn = document.getElementById('reset-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function() {
+        inputs.forEach(input => {
+          // Revert back to the initial HTML value attribute
+          input.value = input.defaultValue;
+        });
+        calculateTotals();
+      });
+    }
 
     // Run math once on load
     calculateTotals();
